@@ -61,7 +61,8 @@ namespace GenericUnitOfWork.Base
             {
                 throw new ArgumentNullException("entity");
             }
-            _context.Entry(entity).State = EntityState.Modified;
+
+            _context.Update<T>(entity);
         }
 
         public T Delete(long id)

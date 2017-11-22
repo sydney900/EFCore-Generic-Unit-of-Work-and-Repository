@@ -16,5 +16,6 @@ namespace GenericUnitOfWork.Base
         void Dispose();
         DbSet<T> Set<T>() where T : class;
         EntityEntry<T> Entry<T>(T entity) where T : class;
+        EntityEntry<T> Update<T>(T entity) where T : class;
     }
 }

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyEFTests.Extension
 {
-    internal class TestDbAsyncQueryProvider<TEntity> : IDbAsyncQueryProvider
+    internal class TestDbAsyncQueryProvider<TEntity> : Microsoft.EntityFrameworkCore.Query.Internal.IAsyncQueryProvider
     {
         private readonly IQueryProvider _inner;
 
@@ -38,18 +35,25 @@ namespace MyEFTests.Extension
             return _inner.Execute<TResult>(expression);
         }
 
-        public Task<object> ExecuteAsync(Expression expression, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(Execute(expression));
-        }
+        //public Task<object> ExecuteAsync(Expression expression, CancellationToken cancellationToken)
+        //{
+        //    return Task.FromResult(Execute(expression));
+        //}
 
         public Task<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
         {
             return Task.FromResult(Execute<TResult>(expression));
         }
+
+        public IAsyncEnumerable<TResult> ExecuteAsync<TResult>(Expression expression)
+        {
+            Task<TResult> task = Task.FromResult(Execute<TResult>(expression));
+            return (IAsyncEnumerable<TResult>)task;
+        }
+
     }
 
-    internal class TestDbAsyncEnumerable<T> : EnumerableQuery<T>, IDbAsyncEnumerable<T>, IQueryable<T>
+    internal class TestDbAsyncEnumerable<T> : EnumerableQuery<T>, IAsyncEnumerable<T>, IQueryable<T>
     {
         public TestDbAsyncEnumerable(IEnumerable<T> enumerable)
             : base(enumerable)
@@ -59,14 +63,9 @@ namespace MyEFTests.Extension
             : base(expression)
         { }
 
-        public IDbAsyncEnumerator<T> GetAsyncEnumerator()
+        public IAsyncEnumerator<T> GetEnumerator()
         {
             return new TestDbAsyncEnumerator<T>(this.AsEnumerable().GetEnumerator());
-        }
-
-        IDbAsyncEnumerator IDbAsyncEnumerable.GetAsyncEnumerator()
-        {
-            return GetAsyncEnumerator();
         }
 
         IQueryProvider IQueryable.Provider
@@ -75,7 +74,7 @@ namespace MyEFTests.Extension
         }
     }
 
-    internal class TestDbAsyncEnumerator<T> : IDbAsyncEnumerator<T>
+    internal class TestDbAsyncEnumerator<T> : IAsyncEnumerator<T>
     {
         private readonly IEnumerator<T> _inner;
 
@@ -89,7 +88,7 @@ namespace MyEFTests.Extension
             _inner.Dispose();
         }
 
-        public Task<bool> MoveNextAsync(CancellationToken cancellationToken)
+        public Task<bool> MoveNext(CancellationToken cancellationToken)
         {
             return Task.FromResult(_inner.MoveNext());
         }
@@ -97,11 +96,6 @@ namespace MyEFTests.Extension
         public T Current
         {
             get { return _inner.Current; }
-        }
-
-        object IDbAsyncEnumerator.Current
-        {
-            get { return Current; }
         }
     }
 

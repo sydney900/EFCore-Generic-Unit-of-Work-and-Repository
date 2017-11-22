@@ -158,7 +158,7 @@
     </Compile>
     <Compile Include="Migrations\MyAppContextModelSnapshot.cs" />
     <Compile Include="MyAppContextFactory.cs" />
-    <Compile Include="MyUnitOfWorkIntegrationTest.cs" />
+    <Compile Include="UnitOfWorkIntegrationTest.cs" />
     <Compile Include="RepositoryIntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

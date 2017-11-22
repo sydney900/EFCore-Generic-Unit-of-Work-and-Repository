@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace GenericUnitOfWork.IntegrationTest
 {
     [TestClass]
-    public class MyUnitOfWorkIntegrationTest
+    public class UnitOfWorkIntegrationTest
     {
         private MyAppContext _context;
         private UnitOfWork _db;

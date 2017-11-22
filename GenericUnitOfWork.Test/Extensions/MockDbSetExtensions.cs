@@ -1,11 +1,7 @@
-﻿using Moq;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Moq;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyEFTests.Extension
 {
@@ -60,8 +56,8 @@ namespace MyEFTests.Extension
 
         private static void SetupMockDbSetAsyncForQuery<T>(Mock<DbSet<T>> mockSet, IQueryable<T> data) where T : class
         {
-            mockSet.As<IDbAsyncEnumerable<T>>()
-                           .Setup(m => m.GetAsyncEnumerator())
+            mockSet.As<IAsyncEnumerable<T>>()
+                           .Setup(m => m.GetEnumerator())
                            .Returns(new TestDbAsyncEnumerator<T>(data.GetEnumerator()));
 
             mockSet.As<IQueryable<T>>()

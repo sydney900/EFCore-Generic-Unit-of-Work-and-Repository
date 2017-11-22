@@ -7,8 +7,8 @@ using FluentAssertions;
 using Moq;
 using System.Collections.Generic;
 using MyEFTests.Extension;
-using System.Data.Entity;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GenericUnitOfWork.Test
 {
@@ -29,7 +29,8 @@ namespace GenericUnitOfWork.Test
             };
 
 
-            _mockContext = new Mock<MyAppContext>();
+            var builder = new DbContextOptionsBuilder<MyAppContext>();
+            _mockContext = new Mock<MyAppContext>(builder.Options);
         }
 
         [TestCleanup]
