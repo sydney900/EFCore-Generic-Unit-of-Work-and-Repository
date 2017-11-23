@@ -1,14 +1,13 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GenericUnitOfWork.Base;
-using BussinessCore.Model;
+﻿using BussinessCore.Model;
 using FluentAssertions;
-using Moq;
-using System.Collections.Generic;
-using MyEFTests.Extension;
-using System.Threading.Tasks;
+using GenericUnitOfWork.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using MyEFTests.Extension;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GenericUnitOfWork.Test
 {

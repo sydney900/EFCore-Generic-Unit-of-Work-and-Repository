@@ -20,7 +20,7 @@ namespace GenericUnitOfWork.IntegrationTest
             DatabaseHelper.MigrateDbToLatest();
             DatabaseHelper.Seed();
 
-            _transactionScope = new TransactionScope();
+            _transactionScope = new TransactionScope(TransactionScopeOption.Suppress);
             _context = DatabaseHelper.CreateMyAppContext();
         }
 

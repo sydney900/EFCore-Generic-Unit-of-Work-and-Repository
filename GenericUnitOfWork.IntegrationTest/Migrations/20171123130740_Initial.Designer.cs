@@ -11,7 +11,7 @@ using System;
 namespace GenericUnitOfWork.IntegrationTest.Migrations
 {
     [DbContext(typeof(MyAppContext))]
-    [Migration("20171122051633_Initial")]
+    [Migration("20171123130740_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

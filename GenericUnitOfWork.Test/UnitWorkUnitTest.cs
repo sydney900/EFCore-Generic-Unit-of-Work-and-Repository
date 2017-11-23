@@ -1,12 +1,11 @@
-﻿using System;
+﻿using BussinessCore.Model;
+using GenericUnitOfWork.Base;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using GenericUnitOfWork.Base;
-using BussinessCore.Model;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace GenericUnitOfWork.Test
 {
