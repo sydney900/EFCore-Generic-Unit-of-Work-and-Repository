@@ -5,6 +5,8 @@ using GenericUnitOfWork.Base;
 using BussinessCore.Model;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace GenericUnitOfWork.Test
 {
@@ -51,5 +53,32 @@ namespace GenericUnitOfWork.Test
 
             Assert.IsInstanceOfType(unitOfWork.Repository<Client>(), typeof(Repository<Client>));
         }
+
+        [TestMethod]
+        public void UnitOfWork_SaveChanges_ShouldCallContextSaveChanageMethod()
+        {
+            var builder = new DbContextOptionsBuilder<MyAppContext>();
+            Mock<MyAppContext> mockAppContext = new Mock<MyAppContext>(builder.Options);
+            Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
+            UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
+
+            unitOfWork.SaveChanges();
+
+            mockAppContext.Verify(m => m.SaveChanges());
+        }
+
+        [TestMethod]
+        public async Task UnitOfWork_SaveChangesAsync_ShouldCallContextSaveChangesAsyncMethod()
+        {
+            var builder = new DbContextOptionsBuilder<MyAppContext>();
+            Mock<MyAppContext> mockAppContext = new Mock<MyAppContext>(builder.Options);
+            Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
+            UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
+
+            await unitOfWork.SaveChangesAsync();
+
+            mockAppContext.Verify(m => m.SaveChangesAsync(default(CancellationToken)));
+        }
+
     }
 }
