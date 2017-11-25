@@ -22,11 +22,11 @@ namespace GenericUnitOfWork.IntegrationTest
         [TestInitialize]
         public void SetUp()
         {
-            DatabaseHelper.MigrateDbToLatest();
-            DatabaseHelper.Seed();
+            TestDatabaseHelper.MigrateDbToLatest();
+            TestDatabaseHelper.Seed();
 
             _transactionScope = new TransactionScope(TransactionScopeOption.Suppress);
-            _context = DatabaseHelper.CreateMyAppContext();
+            _context = TestDatabaseHelper.CreateMyAppContext();
             _db = new UnitOfWork(_context, new ClientRepository(_context), new ProductRepository(_context));
         }
 
@@ -137,7 +137,7 @@ namespace GenericUnitOfWork.IntegrationTest
 
             var clients = clientRepoitory.GetAllClientsSortByName();
 
-            clients.Should().HaveCount(DatabaseHelper.ListClient.Count);
+            clients.Should().HaveCount(TestDatabaseHelper.ListClient.Count);
             clients.Should().BeInAscendingOrder(c => c.ClientName);
         }
 
@@ -148,7 +148,7 @@ namespace GenericUnitOfWork.IntegrationTest
 
             var clients = await clientRepoitory.GetAllClientsSortByNameAsync();
 
-            clients.Should().HaveCount(DatabaseHelper.ListClient.Count);
+            clients.Should().HaveCount(TestDatabaseHelper.ListClient.Count);
             clients.Should().BeInAscendingOrder(c => c.ClientName);
         }
 

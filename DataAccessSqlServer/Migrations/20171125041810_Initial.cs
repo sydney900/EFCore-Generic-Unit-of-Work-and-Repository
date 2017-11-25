@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
-namespace GenericUnitOfWork.IntegrationTest.Migrations
+namespace DataAccessSqlServer.Migrations
 {
     public partial class Initial : Migration
     {

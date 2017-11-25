@@ -12,7 +12,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GenericUnitOfWork.IntegrationTest
 {
-    public class DatabaseHelper
+    public class TestDatabaseHelper
     {
         public static List<Client> ListClient = new List<Client> {
             new Client { ClientName = "Joe", Email = "Joe@hotmail.com", ClientPassWord = "AA" },
@@ -26,9 +26,13 @@ namespace GenericUnitOfWork.IntegrationTest
             new Product { Name = "Milk" }
         };
 
+        public TestDatabaseHelper()
+        {
+        }
+
         public static void MigrateDbToLatest()
         {
-            DbContext db = DatabaseHelper.CreateMyAppContext();
+            DbContext db = CreateMyAppContext();
             var pendingMigrations = db.Database.GetPendingMigrations().ToList();
             if (pendingMigrations.Any())
             {
@@ -40,7 +44,7 @@ namespace GenericUnitOfWork.IntegrationTest
 
         public static void Seed()
         {
-            MyAppContext ctx = DatabaseHelper.CreateMyAppContext();
+            MyAppContext ctx = CreateMyAppContext();
 
             if (ctx.Clients.Any())
                 return;
@@ -53,11 +57,11 @@ namespace GenericUnitOfWork.IntegrationTest
 
         public static MyAppContext CreateMyAppContext()
         {
-            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=MyAppTestCore2017;Trusted_Connection=True;MultipleActiveResultSets=true;App=MyAppTestCore2017;";
-            var builder = new DbContextOptionsBuilder<MyAppContext>();
-            builder.UseSqlServer(connectionString, b => b.MigrationsAssembly("GenericUnitOfWork.IntegrationTest"));
-
-            return new MyAppContext(builder.Options);
+#if SQLite
+            return DataAccessSqlite.DatabaseHelper.CreateMyAppContext();
+#else
+            return DataAccessSqlServer.DatabaseHelper.CreateMyAppContext();
+#endif            
         }
     }
 }

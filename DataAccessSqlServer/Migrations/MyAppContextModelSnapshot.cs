@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace GenericUnitOfWork.IntegrationTest.Migrations
+namespace DataAccessSqlServer.Migrations
 {
     [DbContext(typeof(MyAppContext))]
     partial class MyAppContextModelSnapshot : ModelSnapshot

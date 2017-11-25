@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace GenericUnitOfWork.IntegrationTest.Migrations
+namespace DataAccessSqlServer.Migrations
 {
     [DbContext(typeof(MyAppContext))]
-    [Migration("20171123130740_Initial")]
+    [Migration("20171125041810_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
