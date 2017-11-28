@@ -6,8 +6,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using MyEFTests.Extension;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BussinessCore.DTO;
 
 namespace GenericUnitOfWork.Test
 {
@@ -22,9 +24,9 @@ namespace GenericUnitOfWork.Test
         {
             _clients = new List<Client>
             {
-                new Client {Id =1, ClientName="Trump",  Email="Trump@hotmail.com"},
-                new Client {Id =2, ClientName="Marry",  Email="Marry@hotmail.com"},
-                new Client {Id =3, ClientName="John",  Email="John@hotmail.com"}
+                new Client {Id =1, ClientName="Trump",  Email="Trump@hotmail.com", LastModified = DateTime.UtcNow, Created = DateTime.UtcNow},
+                new Client {Id =2, ClientName="Marry",  Email="Marry@hotmail.com", LastModified = DateTime.UtcNow, Created = DateTime.UtcNow},
+                new Client {Id =3, ClientName="John",  Email="John@hotmail.com", LastModified = DateTime.UtcNow, Created = DateTime.UtcNow}
             };
 
 
@@ -202,7 +204,7 @@ namespace GenericUnitOfWork.Test
         }
 
         [TestMethod]
-        public void ClientRepository_GetAllClientsSortByName_ShouldWork()
+        public void ClientRepository_GetAllClientsSortByName_ShouldGetAllClientsAndSortIsCorrect()
         {
             SetMockClientDbSet();
             ClientRepository clientRepoitory = new ClientRepository(_mockContext.Object);
@@ -213,5 +215,24 @@ namespace GenericUnitOfWork.Test
             clients.Should().BeInAscendingOrder(c => c.ClientName);
         }
 
+        [TestMethod]
+        public void ClientRepository_GetAllClientsSortByName_ShouldGetAllClientFields()
+        {
+            SetMockClientDbSet();
+            ClientRepository clientRepoitory = new ClientRepository(_mockContext.Object);
+
+            var clients = clientRepoitory.GetAllClientsSortByName();
+
+            var expected = _clients.Select(c => new ClientDto
+            {
+                Id = c.Id,
+                ClientName = c.ClientName,
+                Email = c.Email,
+                LastModified = c.LastModified
+            }).ToList();
+
+
+            clients.ShouldBeEquivalentTo(expected);
+        }
     }
 }
