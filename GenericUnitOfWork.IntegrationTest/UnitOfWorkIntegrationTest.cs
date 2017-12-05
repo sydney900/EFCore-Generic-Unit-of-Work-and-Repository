@@ -131,6 +131,41 @@ namespace GenericUnitOfWork.IntegrationTest
         }
 
         [TestMethod]
+        public void CreateUnitOfWorkWithTwoRepository_WhenBothUpdateWithoutTransactionWithException_BothChangeShouldNotBeUpdateToDB()
+        {
+            string newName = "Barry_123";
+            int clientId = 1;
+            int productId = 1;
+            string pName = "Milk_123";
+
+            try
+            {
+                Client client = _db.Repository<Client>().Get(clientId);
+                client.ClientName = newName;
+
+                //Product product = _db.Repository<Product>().Get(-productId);
+                Product product = _db.Repository<Product>().Get(productId);
+                product.Id = -1;
+                product.Name = pName;
+
+                _db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                _context = TestDatabaseHelper.CreateMyAppContext();
+                _db = new UnitOfWork(_context, new ClientRepository(_context), new ProductRepository(_context));
+
+                Client c = _db.Repository<Client>().Get(clientId);
+                _db.Repository<Client>().Reload(c);
+                Assert.AreNotEqual(newName, c.ClientName);
+
+                Product u = _db.Repository<Product>().Get(productId);
+                _db.Repository<Product>().Reload(u);
+                Assert.AreNotEqual(pName, u.Name);
+            }
+        }
+
+        [TestMethod]
         public void CreateUnitOfWorkWithTwoRepository_ClientRepository_GetAllClientsSortByName_ShouldWork()
         {
             ClientRepository clientRepoitory = _db.Repository<Client>() as ClientRepository;
@@ -154,3 +189,4 @@ namespace GenericUnitOfWork.IntegrationTest
 
     }
 }
+

@@ -132,6 +132,7 @@
   <ItemGroup>
     <Compile Include="Extensions\MockDbSetExtensions.cs" />
     <Compile Include="Extensions\TestDbAsyncQueryProvider.cs" />
+    <Compile Include="MyAppContextTest.cs" />
     <Compile Include="RepositoryUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitWorkUnitTest.cs" />

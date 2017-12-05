@@ -45,8 +45,7 @@ namespace GenericUnitOfWork.Test
         [TestMethod]
         public void CreateUnitOfWork_WithAnyClassRepository_ShouldGetThisTypeOfRepository()
         {
-            var builder = new DbContextOptionsBuilder<MyAppContext>();
-            Mock<MyAppContext> mockAppContext = new Mock<MyAppContext>(builder.Options);
+            Mock<IAppContext> mockAppContext = new Mock<IAppContext>();
             Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
             UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
 
@@ -56,8 +55,7 @@ namespace GenericUnitOfWork.Test
         [TestMethod]
         public void UnitOfWork_SaveChanges_ShouldCallContextSaveChanageMethod()
         {
-            var builder = new DbContextOptionsBuilder<MyAppContext>();
-            Mock<MyAppContext> mockAppContext = new Mock<MyAppContext>(builder.Options);
+            Mock<IAppContext> mockAppContext = new Mock<IAppContext>();
             Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
             UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
 
@@ -69,14 +67,49 @@ namespace GenericUnitOfWork.Test
         [TestMethod]
         public async Task UnitOfWork_SaveChangesAsync_ShouldCallContextSaveChangesAsyncMethod()
         {
-            var builder = new DbContextOptionsBuilder<MyAppContext>();
-            Mock<MyAppContext> mockAppContext = new Mock<MyAppContext>(builder.Options);
+            Mock<IAppContext> mockAppContext = new Mock<IAppContext>();
             Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
             UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
 
             await unitOfWork.SaveChangesAsync();
 
             mockAppContext.Verify(m => m.SaveChangesAsync(default(CancellationToken)));
+        }
+
+        [TestMethod]
+        public void UnitOfWork_BeginTransaction_ShouldCallContextBeginTransactionMethod()
+        {
+            Mock<IAppContext> mockAppContext = new Mock<IAppContext>();
+            Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
+            UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
+
+            unitOfWork.BeginTransaction();
+
+            mockAppContext.Verify(m => m.BeginTransaction());
+        }
+
+        [TestMethod]
+        public void UnitOfWork_Commit_ShouldCallContextCommit()
+        {
+            Mock<IAppContext> mockAppContext = new Mock<IAppContext>();
+            Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
+            UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
+
+            unitOfWork.Commit();
+
+            mockAppContext.Verify(m => m.Commit());
+        }
+
+        [TestMethod]
+        public void UnitOfWork_Rollback_ShouldCallContextRollback()
+        {
+            Mock<IAppContext> mockAppContext = new Mock<IAppContext>();
+            Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
+            UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
+
+            unitOfWork.Rollback();
+
+            mockAppContext.Verify(m => m.Rollback());
         }
 
     }
