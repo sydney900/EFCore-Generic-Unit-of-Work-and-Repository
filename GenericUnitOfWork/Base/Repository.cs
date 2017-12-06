@@ -84,10 +84,9 @@ namespace GenericUnitOfWork.Base
             if (t != default(T))
             {
                 _entities.Remove(t);
-                return t;
             }
 
-            return default(T);
+            return t;
         }
 
         public void Reload(T entity)

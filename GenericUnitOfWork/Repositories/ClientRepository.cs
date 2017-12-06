@@ -10,7 +10,7 @@ namespace GenericUnitOfWork
 {
     public class ClientRepository : Repository<Client>
     {
-        public ClientRepository(MyAppContext context)
+        public ClientRepository(IAppContext context)
             : base(context)
         {
             //context.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyEFTests.Extension
 {
-    internal class TestDbAsyncQueryProvider<TEntity> : Microsoft.EntityFrameworkCore.Query.Internal.IAsyncQueryProvider
+    internal class TestDbAsyncQueryProvider<TEntity> : IAsyncQueryProvider
     {
         private readonly IQueryProvider _inner;
 
@@ -35,10 +36,10 @@ namespace MyEFTests.Extension
             return _inner.Execute<TResult>(expression);
         }
 
-        //public Task<object> ExecuteAsync(Expression expression, CancellationToken cancellationToken)
-        //{
-        //    return Task.FromResult(Execute(expression));
-        //}
+        public Task<object> ExecuteAsync(Expression expression, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(Execute(expression));
+        }
 
         public Task<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
         {

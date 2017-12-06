@@ -1,4 +1,5 @@
 ﻿using BussinessCore.Model;
+using FluentAssertions;
 using GenericUnitOfWork.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -112,5 +113,33 @@ namespace GenericUnitOfWork.Test
             mockAppContext.Verify(m => m.Rollback());
         }
 
+        [TestMethod]
+        public void UnitOfWork_Dispose_ShouldCallContextDispose()
+        {
+            Mock<IAppContext> mockAppContext = new Mock<IAppContext>();
+            Repository<Client> rep = new Repository<Client>(mockAppContext.Object);
+            UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, rep);
+
+            unitOfWork.Dispose();
+
+            mockAppContext.Verify(m => m.Dispose());
+        }
+
+        [TestMethod]
+        public void UnitOfWork_Dispose_ShouldClearAllRepositoried()
+        {
+            Mock<IAppContext> mockAppContext = new Mock<IAppContext>();
+            ClientRepository rep = new ClientRepository(mockAppContext.Object);
+            ProductRepository repProd = new ProductRepository(mockAppContext.Object);
+            UnitOfWork unitOfWork = new UnitOfWork(mockAppContext.Object, new object[] { rep, repProd });
+
+            unitOfWork.Dispose();
+
+            var clientRep = unitOfWork.Repository<Client>();
+            clientRep.Should().BeNull();
+
+            var productRep = unitOfWork.Repository<Product>();
+            productRep.Should().BeNull();
+        }
     }
 }

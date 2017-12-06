@@ -131,7 +131,7 @@ namespace GenericUnitOfWork.IntegrationTest
         }
 
         [TestMethod]
-        public void CreateUnitOfWorkWithTwoRepository_WhenBothUpdateWithoutTransactionWithException_BothChangeShouldNotBeUpdateToDB()
+        public async Task CreateUnitOfWorkWithTwoRepository_WhenBothUpdateWithoutTransactionWithException_BothChangeShouldNotBeUpdateToDB()
         {
             string newName = "Barry_123";
             int clientId = 1;
@@ -140,27 +140,27 @@ namespace GenericUnitOfWork.IntegrationTest
 
             try
             {
-                Client client = _db.Repository<Client>().Get(clientId);
+                Client client = await _db.Repository<Client>().GetAsync(clientId);
                 client.ClientName = newName;
 
                 //Product product = _db.Repository<Product>().Get(-productId);
-                Product product = _db.Repository<Product>().Get(productId);
+                Product product = await _db.Repository<Product>().GetAsync(productId);
                 product.Id = -1;
                 product.Name = pName;
 
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
             catch (Exception)
             {
                 _context = TestDatabaseHelper.CreateMyAppContext();
                 _db = new UnitOfWork(_context, new ClientRepository(_context), new ProductRepository(_context));
 
-                Client c = _db.Repository<Client>().Get(clientId);
-                _db.Repository<Client>().Reload(c);
+                Client c = await _db.Repository<Client>().GetAsync(clientId);
+                await _db.Repository<Client>().ReloadAsync(c);
                 Assert.AreNotEqual(newName, c.ClientName);
 
-                Product u = _db.Repository<Product>().Get(productId);
-                _db.Repository<Product>().Reload(u);
+                Product u = await _db.Repository<Product>().GetAsync(productId);
+                await _db.Repository<Product>().ReloadAsync(u);
                 Assert.AreNotEqual(pName, u.Name);
             }
         }

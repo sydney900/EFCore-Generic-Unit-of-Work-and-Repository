@@ -145,6 +145,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyAppContextIntegrationTest.cs" />
     <Compile Include="TestDatabaseHelper.cs" />
     <Compile Include="UnitOfWorkIntegrationTest.cs" />
     <Compile Include="RepositoryIntegrationTest.cs" />

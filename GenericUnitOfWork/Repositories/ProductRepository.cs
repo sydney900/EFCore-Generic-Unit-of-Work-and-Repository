@@ -5,7 +5,7 @@ namespace GenericUnitOfWork
 {
     public class ProductRepository : Repository<Product>
     {
-        public ProductRepository(MyAppContext context)
+        public ProductRepository(IAppContext context)
             : base(context)
         {
 

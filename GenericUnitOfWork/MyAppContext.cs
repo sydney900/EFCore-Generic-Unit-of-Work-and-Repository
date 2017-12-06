@@ -42,6 +42,7 @@ namespace GenericUnitOfWork
 
         public void CloseConnection()
         {
+            Database.CloseConnection();
         }
 
 

@@ -204,6 +204,32 @@ namespace GenericUnitOfWork.Test
         }
 
         [TestMethod]
+        public void Repository_DeleteNoExistOne_ShouldReturnNullAndDeleteNothing()
+        {
+            Repository<Client> rep = GetMockRepository();
+
+            int id = 20;
+            var ret = rep.Delete(id);
+            ret.Should().BeNull();
+
+            var queriedClients = rep.GetAll();
+            queriedClients.Should().HaveCount(_clients.Count);
+        }
+
+        [TestMethod]
+        public async Task Repository_DeleteAsyncNoExistOne_ShouldReturnNullAndDeleteNothing()
+        {
+            Repository<Client> rep = GetRepositoryForAsync();
+
+            int id = 20;
+            Client ret = await rep.DeleteAsync(id);
+            ret.Should().BeNull();
+
+            var queriedClients = await rep.GetAllAsync();
+            queriedClients.Should().HaveCount(_clients.Count);
+        }
+
+        [TestMethod]
         public void ClientRepository_GetAllClientsSortByName_ShouldGetAllClientsAndSortIsCorrect()
         {
             SetMockClientDbSet();

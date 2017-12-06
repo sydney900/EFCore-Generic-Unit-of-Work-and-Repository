@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using FluentAssertions;
 
 namespace GenericUnitOfWork.Test
 {
@@ -105,6 +106,5 @@ namespace GenericUnitOfWork.Test
 
             mockTransaction.Verify(t => t.Rollback(), "Should not be called");
         }
-
     }
 }

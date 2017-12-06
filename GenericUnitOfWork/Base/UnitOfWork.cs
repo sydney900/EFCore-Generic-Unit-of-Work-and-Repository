@@ -27,7 +27,8 @@ namespace GenericUnitOfWork.Base
                     throw new ArgumentNullException("repository");
 
                 if (!_dictRepositories.ContainsKey(item.EntityType))
-                    _dictRepositories.Add(item.EntityType, item);
+                    //_dictRepositories.Add(item.EntityType, item);
+                    this[item.EntityType] = item;
             }
         }
 
