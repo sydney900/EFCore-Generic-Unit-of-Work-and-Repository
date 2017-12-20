@@ -146,7 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyAppContextIntegrationTest.cs" />
-    <Compile Include="TestDatabaseHelper.cs" />
     <Compile Include="UnitOfWorkIntegrationTest.cs" />
     <Compile Include="RepositoryIntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -11,5 +11,7 @@ namespace BussinessCore.Model
     {
         public string Name { get; set; }
         public byte[] Timestamp { get; set; }
+
+        public virtual List<ClientProduct> ClientsClientProducts { get; set; } = new List<ClientProduct>();
     }
 }

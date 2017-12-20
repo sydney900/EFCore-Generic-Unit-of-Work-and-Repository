@@ -167,9 +167,6 @@
     <Compile Include="..\GenericUnitOfWork.IntegrationTest\RepositoryIntegrationTest.cs">
       <Link>RepositoryIntegrationTest.cs</Link>
     </Compile>
-    <Compile Include="..\GenericUnitOfWork.IntegrationTest\TestDatabaseHelper.cs">
-      <Link>TestDatabaseHelper.cs</Link>
-    </Compile>
     <Compile Include="..\GenericUnitOfWork.IntegrationTest\UnitOfWorkIntegrationTest.cs">
       <Link>UnitOfWorkIntegrationTest.cs</Link>
     </Compile>

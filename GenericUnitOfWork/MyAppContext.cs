@@ -20,6 +20,7 @@ namespace GenericUnitOfWork
 
             modelBuilder.ApplyConfiguration(new ClientConfig());
             modelBuilder.ApplyConfiguration(new ProductConfig());
+            modelBuilder.ApplyConfiguration(new ClientProductConfig());
         }
 
         private IDbContextTransaction _transaction;
@@ -48,5 +49,6 @@ namespace GenericUnitOfWork
 
         public virtual DbSet<Client> Clients { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ClientProduct> ClientProducts { get; set; }
     }
 }

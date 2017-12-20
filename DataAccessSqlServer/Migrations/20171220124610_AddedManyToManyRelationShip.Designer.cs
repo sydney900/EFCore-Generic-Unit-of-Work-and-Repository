@@ -11,9 +11,10 @@ using System;
 namespace DataAccessSqlServer.Migrations
 {
     [DbContext(typeof(MyAppContext))]
-    partial class MyAppContextModelSnapshot : ModelSnapshot
+    [Migration("20171220124610_AddedManyToManyRelationShip")]
+    partial class AddedManyToManyRelationShip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

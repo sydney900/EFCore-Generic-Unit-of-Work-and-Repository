@@ -13,5 +13,8 @@ namespace BussinessCore.Model
         public string ClientPassWord { get; set; }
         public string Email { get; set; }
         public byte[] Timestamp { get; set; }
+
+        public virtual List<ClientProduct> ProductsClientProducts { get; set; } = new List<ClientProduct>();
+
     }
 }

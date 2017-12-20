@@ -4,6 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using FluentAssertions;
 using System.Transactions;
 using System.Data;
+#if SQLite
+using DataAccessSqlite;
+#else
+using DataAccessSqlServer;
+#endif  
 
 namespace GenericUnitOfWork.IntegrationTest
 {
@@ -17,11 +22,11 @@ namespace GenericUnitOfWork.IntegrationTest
         [TestInitialize]
         public void SetUp()
         {
-            TestDatabaseHelper.MigrateDbToLatest();
-            TestDatabaseHelper.Seed();
+            DatabaseHelper.MigrateDbToLatest();
+            DatabaseHelper.Seed();
 
             _transactionScope = new TransactionScope(TransactionScopeOption.Suppress);
-            _context = TestDatabaseHelper.CreateMyAppContext();
+            _context = DatabaseHelper.CreateMyAppContext();
         }
 
         [TestCleanup]

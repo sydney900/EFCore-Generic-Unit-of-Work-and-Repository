@@ -1,8 +1,13 @@
-﻿using GenericUnitOfWork;
+﻿using BussinessCore.Model;
+using GenericUnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.IO;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 
 namespace DataAccessSqlServer
 {
@@ -38,5 +43,58 @@ namespace DataAccessSqlServer
 
             return new MyAppContext(builder.Options);
         }
+
+        public static List<Client> ListClient = new List<Client> {
+            new Client { ClientName = "Joe", Email = "Joe@hotmail.com", ClientPassWord = "AA" },
+            new Client { ClientName = "Marry", Email = "Marry@hotmail.com", ClientPassWord = "CC" },
+            new Client { ClientName = "John", Email = "John@hotmail.com", ClientPassWord = "BB" }
+        };
+
+        public static List<Product> ListProduct = new List<Product>()
+        {
+            new Product { Name = "Bread" },
+            new Product { Name = "Milk" }
+        };
+
+        public static List<ClientProduct> ListCLientProducts = new List<ClientProduct>
+        {
+            new ClientProduct { Client=ListClient[0], Product= ListProduct[0]},
+            new ClientProduct { Client=ListClient[1], Product= ListProduct[1]},
+            new ClientProduct { Client=ListClient[1], Product= ListProduct[0]}
+        };
+
+        public static void StartUp()
+        {
+            MigrateDbToLatest();
+            Seed();
+        }
+
+        public static void MigrateDbToLatest()
+        {
+            DbContext db = CreateMyAppContext();
+            var pendingMigrations = db.Database.GetPendingMigrations().ToList();
+            if (pendingMigrations.Any())
+            {
+                var migrator = db.Database.GetService<IMigrator>();
+                migrator.Migrate();
+                //foreach (var targetMigration in pendingMigrations)
+                //    migrator.Migrate(targetMigration);
+            }
+        }
+
+        public static void Seed()
+        {
+            MyAppContext ctx = CreateMyAppContext();
+
+            if (ctx.Clients.Any())
+                return;
+
+            ctx.Clients.AddRange(ListClient);
+            ctx.Products.AddRange(ListProduct);
+            ctx.ClientProducts.AddRange(ListCLientProducts);
+
+            ctx.SaveChanges();
+        }
+
     }
 }

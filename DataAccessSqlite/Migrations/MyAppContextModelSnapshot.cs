@@ -44,6 +44,19 @@ namespace DataAccessSqlite.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("BussinessCore.Model.ClientProduct", b =>
+                {
+                    b.Property<long>("ClientId");
+
+                    b.Property<long>("ProductId");
+
+                    b.HasKey("ClientId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ClientProducts");
+                });
+
             modelBuilder.Entity("BussinessCore.Model.Product", b =>
                 {
                     b.Property<long>("Id")
@@ -63,6 +76,19 @@ namespace DataAccessSqlite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("BussinessCore.Model.ClientProduct", b =>
+                {
+                    b.HasOne("BussinessCore.Model.Client", "Client")
+                        .WithMany("ProductsClientProducts")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BussinessCore.Model.Product", "Product")
+                        .WithMany("ClientsClientProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

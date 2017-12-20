@@ -34,5 +34,10 @@ namespace GenericUnitOfWork
             return await _entities.OrderBy(c => c.ClientName).Select(selectorClient).ToListAsync();
         }
 
+        public Product[] GetClientProducts(long id)
+        {
+            return _entities.Where(i => i.Id == id).SelectMany(i => i.ProductsClientProducts.Select(p => p.Product)).ToArray();
+        }
+
     }
 }

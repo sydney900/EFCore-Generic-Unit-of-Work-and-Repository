@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using BussinessCore.Model;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccessSqlite
 {
@@ -38,5 +43,58 @@ namespace DataAccessSqlite
 
             return new MyAppContext(builder.Options);
         }
+
+        public static List<Client> ListClient = new List<Client> {
+            new Client { ClientName = "Joe", Email = "Joe@hotmail.com", ClientPassWord = "AA" },
+            new Client { ClientName = "Marry", Email = "Marry@hotmail.com", ClientPassWord = "CC" },
+            new Client { ClientName = "John", Email = "John@hotmail.com", ClientPassWord = "BB" }
+        };
+
+        public static List<Product> ListProduct = new List<Product>()
+        {
+            new Product { Name = "Bread" },
+            new Product { Name = "Milk" }
+        };
+
+        public static List<ClientProduct> ListCLientProducts = new List<ClientProduct>
+        {
+            new ClientProduct { Client=ListClient[0], Product= ListProduct[0]},
+            new ClientProduct { Client=ListClient[1], Product= ListProduct[1]},
+            new ClientProduct { Client=ListClient[1], Product= ListProduct[0]}
+        };
+
+        public static void StartUp()
+        {
+            MigrateDbToLatest();
+            Seed();
+        }
+
+        public static void MigrateDbToLatest()
+        {
+            DbContext db = CreateMyAppContext();
+            var pendingMigrations = db.Database.GetPendingMigrations();
+            if (pendingMigrations.Any())
+            {
+                var migrator = db.Database.GetService<IMigrator>();
+                migrator.Migrate();
+                //foreach (var targetMigration in pendingMigrations)
+                //    migrator.Migrate(targetMigration);
+            }
+        }
+
+        public static void Seed()
+        {
+            MyAppContext ctx = CreateMyAppContext();
+
+            if (ctx.Clients.Any())
+                return;
+
+            ctx.Clients.AddRange(ListClient);
+            ctx.Products.AddRange(ListProduct);
+            ctx.ClientProducts.AddRange(ListCLientProducts);
+
+            ctx.SaveChanges();
+        }
+
     }
 }

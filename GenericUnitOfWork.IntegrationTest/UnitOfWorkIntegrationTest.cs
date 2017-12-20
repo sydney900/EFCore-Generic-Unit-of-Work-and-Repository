@@ -8,6 +8,12 @@ using System.Linq;
 using System.Transactions;
 using FluentAssertions;
 using System.Threading.Tasks;
+#if SQLite
+using DataAccessSqlite;
+#else
+using DataAccessSqlServer;
+#endif  
+
 
 namespace GenericUnitOfWork.IntegrationTest
 {
@@ -22,11 +28,11 @@ namespace GenericUnitOfWork.IntegrationTest
         [TestInitialize]
         public void SetUp()
         {
-            TestDatabaseHelper.MigrateDbToLatest();
-            TestDatabaseHelper.Seed();
+            DatabaseHelper.MigrateDbToLatest();
+            DatabaseHelper.Seed();
 
             _transactionScope = new TransactionScope(TransactionScopeOption.Suppress);
-            _context = TestDatabaseHelper.CreateMyAppContext();
+            _context = DatabaseHelper.CreateMyAppContext();
             _db = new UnitOfWork(_context, new ClientRepository(_context), new ProductRepository(_context));
         }
 
@@ -152,7 +158,7 @@ namespace GenericUnitOfWork.IntegrationTest
             }
             catch (Exception)
             {
-                _context = TestDatabaseHelper.CreateMyAppContext();
+                _context = DatabaseHelper.CreateMyAppContext();
                 _db = new UnitOfWork(_context, new ClientRepository(_context), new ProductRepository(_context));
 
                 Client c = await _db.Repository<Client>().GetAsync(clientId);
@@ -172,7 +178,7 @@ namespace GenericUnitOfWork.IntegrationTest
 
             var clients = clientRepoitory.GetAllClientsSortByName();
 
-            clients.Should().HaveCount(TestDatabaseHelper.ListClient.Count);
+            clients.Should().HaveCount(DatabaseHelper.ListClient.Count);
             clients.Should().BeInAscendingOrder(c => c.ClientName);
         }
 
@@ -183,7 +189,7 @@ namespace GenericUnitOfWork.IntegrationTest
 
             var clients = await clientRepoitory.GetAllClientsSortByNameAsync();
 
-            clients.Should().HaveCount(TestDatabaseHelper.ListClient.Count);
+            clients.Should().HaveCount(DatabaseHelper.ListClient.Count);
             clients.Should().BeInAscendingOrder(c => c.ClientName);
         }
 
